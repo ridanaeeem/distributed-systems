@@ -62,11 +62,11 @@ func runTests(
 		name  string
 		setup func()
 	}{
-		// {"TestK1", func() { AveragePeriod = 0.8; K = 1; QuitEarly = false }},
-		// {"TestK10", func() { AveragePeriod = 0.8; K = 10; QuitEarly = false }},
-		// {"TestK100", func() { AveragePeriod = 0.8; K = 100; QuitEarly = false }},
+		{"TestK1", func() { AveragePeriod = 0.8; K = 1; QuitEarly = false }},
+		{"TestK10", func() { AveragePeriod = 0.8; K = 10; QuitEarly = false }},
+		{"TestK100", func() { AveragePeriod = 0.8; K = 100; QuitEarly = false }},
 		{"TestLongAveragePeriod", func() { AveragePeriod = 5.0; K = 100; QuitEarly = false }},
-		// {"TestQuit", func() { AveragePeriod = 0.8; K = 100; QuitEarly = true }},
+		{"TestQuit", func() { AveragePeriod = 0.8; K = 100; QuitEarly = true }},
 	}
 
 	for _, tc := range testCases {
