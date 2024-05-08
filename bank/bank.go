@@ -1,6 +1,7 @@
 package bank
 
 import (
+	"fmt"
 	"log"
 	"sync"
 )
@@ -56,12 +57,16 @@ func (b *Bank) CreateAccount(accountID int) {
 	lock := b.bankLock
 	// lock the mutex while adding to the accounts in the bank
 	lock.Lock()
-	// update the accounts field at that accountID 
-	b.accounts[accountID] = &Account{0, lock}
+	// update the accounts field at that accountID if it makes sense to
+	if accountID < 0 {
+		fmt.Println("Not a valid account ID")
+	} else if b.accounts[accountID] != nil {
+		fmt.Println("An account with this ID has already been created")
+	} else {
+		b.accounts[accountID] = &Account{0, lock}
+	}
 	// unlock mutex
 	lock.Unlock()
-
-	// add stuff to account for repeated IDs and IDs that don't exist
 }
 
 // deposit a given amount to the specified account
