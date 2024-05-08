@@ -63,7 +63,7 @@ func (b *Bank) CreateAccount(accountID int) {
 	} else if b.accounts[accountID] != nil {
 		fmt.Println("An account with this ID has already been created")
 	} else {
-		b.accounts[accountID] = &Account{0, lock}
+		b.accounts[accountID] = &Account{0, &sync.Mutex{}}
 	}
 	// unlock mutex
 	lock.Unlock()
