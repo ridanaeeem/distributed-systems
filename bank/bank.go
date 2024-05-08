@@ -52,7 +52,16 @@ func (b *Bank) sendEmailTo(accountID int) {
 
 // creates a new account with the given account ID
 func (b *Bank) CreateAccount(accountID int) {
-	// your code here
+	// get the mutex for the bank 
+	lock := b.bankLock
+	// lock the mutex while adding to the accounts in the bank
+	lock.Lock()
+	// update the accounts field at that accountID 
+	b.accounts[accountID] = &Account{0, lock}
+	// unlock mutex
+	lock.Unlock()
+
+	// add stuff to account for repeated IDs and IDs that don't exist
 }
 
 // deposit a given amount to the specified account
