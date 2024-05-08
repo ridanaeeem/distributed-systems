@@ -57,7 +57,9 @@ func mutexAggregator(
 			} 
 			// if it is time to report 
 			if ! time.Now().Before(end){
+				mutex.Lock()
 				out <- WeatherReport{temp/float64(reportsSeen), -1, batch}
+				mutex.Unlock()
 				break
 			}
 		}
