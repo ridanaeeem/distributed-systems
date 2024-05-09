@@ -73,9 +73,9 @@ func (b *Bank) CreateAccount(accountID int) {
 func (b *Bank) Deposit(accountID, amount int) {
 	b.bankLock.Lock()
 	account := b.accounts[accountID]
+	account.lock.Lock()
 	b.bankLock.Unlock()
 
-	account.lock.Lock()
 	DPrintf("[ACQUIRED LOCK][DEPOSIT] for account %d\n", accountID)
 
 	newBalance := account.balance + amount
@@ -90,9 +90,9 @@ func (b *Bank) Deposit(accountID, amount int) {
 func (b *Bank) Withdraw(accountID, amount int) bool {
 	b.bankLock.Lock()
 	account := b.accounts[accountID]
+	account.lock.Lock()
 	b.bankLock.Unlock()
 
-	account.lock.Lock()
 	DPrintf("[ACQUIRED LOCK][WITHDRAW] for account %d\n", accountID)
 
 	if account.balance >= amount {
@@ -110,6 +110,7 @@ func (b *Bank) Withdraw(accountID, amount int) bool {
 		b.notifySupportTeam(accountID)
 		// log the event for further investigation
 		b.logInsufficientBalanceEvent(accountID)
+		account.lock.Unlock()
 		return false
 	}
 }
@@ -119,10 +120,9 @@ func (b *Bank) Transfer(sender int, receiver int, amount int, allowOverdraw bool
 	b.bankLock.Lock()
 	senderAccount := b.accounts[sender]
 	receiverAccount := b.accounts[receiver]
-	b.bankLock.Unlock()
-
 	senderAccount.lock.Lock()
 	receiverAccount.lock.Lock()
+	b.bankLock.Unlock()
 
 	// if the sender has enough balance,
 	// or if overdraws are allowed
